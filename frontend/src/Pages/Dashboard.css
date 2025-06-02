@@ -1,0 +1,29 @@
+/* File: Admin.css */
+
+.dashboard {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f4f6f8;
+}
+
+.content {
+  flex: 1;
+  padding: 40px;
+}
+
+h2 {
+  margin-bottom: 20px;
+}
+
+.admin-box {
+  background-color: white;
+  padding: 20px 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  max-width: 500px;
+}
+
+.admin-box p {
+  margin: 10px 0;
+  font-size: 16px;
+}
