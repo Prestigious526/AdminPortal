@@ -10,8 +10,13 @@ const Login = () => {
   const handleLogin = () => {
     if (role === 'admin' && email === 'admin@example.com' && password === 'admin') {
       navigate('/dashboard');
+      localStorage.setItem('userRole', 'admin');
     } else if (role === 'employee' && email === 'employee@example.com' && password === 'employee') {
       navigate('/dashboard');
+      localStorage.setItem('userRole', 'employee'); 
+    } else if (role === 'manager' && email === 'manager@example.com' && password === 'manager') {
+      navigate('/dashboard');
+      localStorage.setItem('userRole', 'manager'); 
     } else {
       alert('Invalid credentials');
     }

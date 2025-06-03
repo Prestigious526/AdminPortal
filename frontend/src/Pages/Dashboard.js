@@ -2,9 +2,21 @@ import { Box, Typography, Paper } from '@mui/material';
 import './Dashboard.css';
 import SidebarAdmin from '../components/SidebarAdmin';
 import SidebarUser from '../components/SidebarUser';
+import SidebarManager from '../components/SidebarManager';
 const Dashboard= () => {
   const userRole = localStorage.getItem('userRole'); 
-  const Sidebar= userRole== 'admin' ? SidebarAdmin : SidebarUser;
+  const Sidebar = () => {
+  if (userRole === 'admin') {
+    return <SidebarAdmin />;
+  } else if (userRole === 'employee') {
+    return <SidebarUser />;
+  } else if (userRole === 'manager') {
+    return <SidebarManager />;
+  } else {
+    alert('Invalid credentials');
+    return null;
+  }
+};
   const adminDetails = {
     name: 'Jane Doe',
     id: 'ADM001',

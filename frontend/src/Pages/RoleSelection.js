@@ -8,6 +8,7 @@ const RoleSelection = () => {
       <h2>Select Login Role</h2>
       <button onClick={() => navigate('/login/admin')}>Admin Login</button>
       <button onClick={() => navigate('/login/employee')}>Employee Login</button>
+      <button onClick={() => navigate('/login/manager')}>Manager Login</button>
     </div>
   );
 };
