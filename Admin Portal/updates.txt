@@ -28,3 +28,7 @@ asked to make frontend
 02/06
 made the first basic frontend
 first git push
+
+3/06
+frontend discussed
+will submit by 5/06

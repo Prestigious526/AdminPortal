@@ -1,9 +1,13 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SidebarUser from '../components/SidebarUser';
-import './EditDetails.css'
-const EditDetails= () => {
-  // Mock user data; in a real app, fetch this based on user ID
+import { Form, Input, Button, Typography, Layout, Card } from 'antd';
+import './EditDetails.css';
+
+const { Title } = Typography;
+const { Content } = Layout;
+
+const EditDetails = () => {
   const [user, setUser] = useState({
     id: 'EMP123',
     name: 'John Doe',
@@ -14,8 +18,8 @@ const EditDetails= () => {
 
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    setUser({ ...user, [e.target.name]: e.target.value });
+  const handleChange = (changedValues) => {
+    setUser((prev) => ({ ...prev, ...changedValues }));
   };
 
   const handleSave = () => {
@@ -25,30 +29,47 @@ const EditDetails= () => {
   };
 
   return (
-    <div className="edit-user-container">
+    <Layout style={{ minHeight: '100vh' }}>
       <SidebarUser />
-      <div className="edit-user-content">
-        <h2>Edit User Details</h2>
-        <form>
-          <label>ID</label>
-          <input type="text" value={user.id} disabled />
+      <Layout style={{ marginLeft: 250, padding: '24px' }}>
+        <Content>
+          <Card title="Edit Your Details" bordered={false} style={{ maxWidth: 600, margin: '0 auto' }}>
+            <Form
+              layout="vertical"
+              initialValues={user}
+              onValuesChange={(_, allValues) => handleChange(allValues)}
+              onFinish={handleSave}
+            >
+              <Form.Item label="ID" name="id">
+                <Input disabled />
+              </Form.Item>
 
-          <label>Name</label>
-          <input type="text" name="name" value={user.name} onChange={handleChange} />
+              <Form.Item label="Name" name="name" rules={[{ required: true, message: 'Please enter your name!' }]}>
+                <Input />
+              </Form.Item>
 
-          <label>Email</label>
-          <input type="email" name="email" value={user.email} onChange={handleChange} />
+              <Form.Item label="Email" name="email" rules={[{ required: true, message: 'Please enter your email!' }]}>
+                <Input type="email" />
+              </Form.Item>
 
-          <label>Phone</label>
-          <input type="text" name="phone" value={user.phone} onChange={handleChange} />
+              <Form.Item label="Phone" name="phone" rules={[{ required: true, message: 'Please enter your phone number!' }]}>
+                <Input />
+              </Form.Item>
 
-          <label>Designation</label>
-          <input type="text" name="designation" value={user.designation} onChange={handleChange} />
+              <Form.Item label="Designation" name="designation" rules={[{ required: true, message: 'Please enter your designation!' }]}>
+                <Input />
+              </Form.Item>
 
-          <button type="button" onClick={handleSave}>Save</button>
-        </form>
-      </div>
-    </div>
+              <Form.Item>
+                <Button type="primary" htmlType="submit" block>
+                  Save
+                </Button>
+              </Form.Item>
+            </Form>
+          </Card>
+        </Content>
+      </Layout>
+    </Layout>
   );
 };
 

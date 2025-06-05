@@ -1,7 +1,10 @@
-// File: pages/Questionnaire.js
 import { useState } from 'react';
+import { Form, Input, Button, Typography, Layout, Card, message } from 'antd';
 import SidebarUser from '../components/SidebarUser';
-import './Questionnaire.css';
+
+const { TextArea } = Input;
+const { Title } = Typography;
+const { Content } = Layout;
 
 const Questionnaire = () => {
   const questions = [
@@ -22,28 +25,41 @@ const Questionnaire = () => {
 
   const handleSubmit = () => {
     console.log('Submitted responses:', responses);
-    alert('Form submitted successfully!');
+    message.success('Form submitted successfully!');
   };
 
   return (
-    <div className="questionnaire-container">
+    <Layout style={{ minHeight: '100vh' }}>
       <SidebarUser />
-      <div className="questionnaire-content">
-        <h2>Employee Appraisal Questionnaire</h2>
-        {questions.map((q, idx) => (
-          <div className="question-block" key={idx}>
-            <label>{q}</label>
-            <textarea
-              value={responses[idx]}
-              onChange={(e) => handleChange(idx, e.target.value)}
-              rows={4}
-              placeholder="Write your answer here..."
-            />
-          </div>
-        ))}
-        <button onClick={handleSubmit}>Submit</button>
-      </div>
-    </div>
+      <Layout style={{ marginLeft: 250, padding: '24px' }}>
+        <Content>
+          <Card title={<Title level={3}>Employee Appraisal Questionnaire</Title>} style={{ maxWidth: 800, margin: '0 auto' }}>
+            <Form layout="vertical" onFinish={handleSubmit}>
+              {questions.map((question, idx) => (
+                <Form.Item
+                  key={idx}
+                  label={question}
+                  name={`response-${idx}`}
+                  rules={[{ required: true, message: 'This field is required.' }]}
+                >
+                  <TextArea
+                    rows={4}
+                    placeholder="Write your answer here..."
+                    value={responses[idx]}
+                    onChange={(e) => handleChange(idx, e.target.value)}
+                  />
+                </Form.Item>
+              ))}
+              <Form.Item>
+                <Button type="primary" htmlType="submit" block>
+                  Submit
+                </Button>
+              </Form.Item>
+            </Form>
+          </Card>
+        </Content>
+      </Layout>
+    </Layout>
   );
 };
 

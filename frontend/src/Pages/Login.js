@@ -1,43 +1,65 @@
-import { useParams, useNavigate } from 'react-router-dom';
+// File: pages/Login.js
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Form, Input, Button, Typography, message } from 'antd';
+import './Login.css'
+const { Title } = Typography;
+
+const userRoles = {
+  'admin@example.com': 'admin',
+  'employee1@example.com': 'employee',
+  'manager1@example.com': 'manager',
+  'hr@example.com': 'hr'
+};
 
 const Login = () => {
-  const { role } = useParams();
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
 
-  const handleLogin = () => {
-    if (role === 'admin' && email === 'admin@example.com' && password === 'admin') {
-      navigate('/dashboard');
-      localStorage.setItem('userRole', 'admin');
-    } else if (role === 'employee' && email === 'employee@example.com' && password === 'employee') {
-      navigate('/dashboard');
-      localStorage.setItem('userRole', 'employee'); 
-    } else if (role === 'manager' && email === 'manager@example.com' && password === 'manager') {
-      navigate('/dashboard');
-      localStorage.setItem('userRole', 'manager'); 
-    } else {
-      alert('Invalid credentials');
-    }
+  const onFinish = (values) => {
+    const { email, password } = values;
+    setLoading(true);
+
+    setTimeout(() => {
+      const role = userRoles[email];
+      if (role && password === 'password123') {
+        localStorage.setItem('userRole', role);
+        localStorage.setItem('userEmail', email);
+        message.success(`Logged in as ${role}`);
+        navigate(`/dashboard`);
+      } else {
+        message.error('Invalid email or password');
+      }
+      setLoading(false);
+    }, 1000);
   };
 
   return (
-    <div style={{ textAlign: 'center' }}>
-      <h2>{role.charAt(0).toUpperCase() + role.slice(1)} Login</h2>
-      <input
-        type="email"
-        placeholder="Email ID"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      /><br />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      /><br />
-      <button onClick={handleLogin}>Login</button>
+    <div className="login-container">
+      <Form name="login" onFinish={onFinish} layout="vertical" className="login-form">
+        <Title level={3}>Login</Title>
+        <Form.Item
+          label="Email"
+          name="email"
+          rules={[{ required: true, message: 'Please input your email!' }]}
+        >
+          <Input type="email" placeholder="Enter your email" />
+        </Form.Item>
+
+        <Form.Item
+          label="Password"
+          name="password"
+          rules={[{ required: true, message: 'Please input your password!' }]}
+        >
+          <Input.Password placeholder="Enter your password" />
+        </Form.Item>
+
+        <Form.Item>
+          <Button type="primary" htmlType="submit" loading={loading} block>
+            Login
+          </Button>
+        </Form.Item>
+      </Form>
     </div>
   );
 };

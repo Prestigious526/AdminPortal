@@ -1,16 +1,43 @@
+import { Menu, Layout } from 'antd';
+import {
+  UserOutlined,
+  PlusSquareOutlined
+} from '@ant-design/icons';
 import { Link } from 'react-router-dom';
-import './SidebarAdmin.css';
-const SidebarManager = () => {
+
+const { Sider } = Layout;
+
+const SidebarAdmin = () => {
   return (
-    <div className="sidebar">
-      <h3>User Panel</h3>
-      <ul>
-        <li><Link to="/dashboard">User Dashboard</Link></li>
-        <li><Link to="/editdetails">Edit Details</Link></li>
-        <li><Link to="/questionnaire">Leave Remarks</Link></li>
-      </ul>
-    </div>
+    <Sider
+      width={250}
+      style={{
+        background: '#fff',
+        height: '100vh',
+        borderRight: '1px solid #f0f0f0',
+        position: 'fixed',
+        left: 0,
+        top: 0,
+        overflow: 'auto',
+      }}
+    >
+      <div style={{ padding: '20px', textAlign: 'center', fontWeight: 'bold', fontSize: '18px' }}>
+        Admin Panel
+      </div>
+      <Menu
+        mode="inline"
+        defaultSelectedKeys={['1']}
+        style={{ borderRight: 0 }}
+      >
+        <Menu.Item key="1" icon={<UserOutlined />}>
+          <Link to="/dashboard">Dashboard</Link>
+        </Menu.Item>
+        <Menu.Item key="2" icon={<PlusSquareOutlined />}>
+          <Link to="/remarks">Add Remarks</Link>
+        </Menu.Item>
+      </Menu>
+    </Sider>
   );
 };
 
-export default SidebarManager;
+export default SidebarAdmin;
