@@ -98,7 +98,6 @@ const AddQuestions = () => {
             />
           </Card>
 
-          {/* Edit Modal */}
           <Modal
             title="Edit Question"
             visible={isEditModalVisible}
