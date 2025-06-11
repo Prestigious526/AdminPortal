@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Layout, Form, Input, Button, Radio, Typography, message, Space, Card } from 'antd';
+import {
+  Layout, Form, Input, Button, Typography, Modal, message, Card, Table
+} from 'antd';
+import { EditOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import SidebarAdmin from '../components/SidebarAdmin';
 
 const { Content, Sider } = Layout;
@@ -8,66 +10,135 @@ const { Title } = Typography;
 
 const EditUser = () => {
   const [form] = Form.useForm();
-  const [mode, setMode] = useState('add');
-  const [user, setUser] = useState({
-    id: '',
-    name: '',
-    email: '',
-    phone: '',
-    designation: ''
-  });
+  const [employees, setEmployees] = useState([
+    { id: '101', name: 'abc', email: 'a@example.com', phone: '9879', designation: 'Dev' },
+    { id: '102', name: 'xyz', email: 'x@example.com', phone: '68769', designation: 'M' }
+  ]);
 
-  const navigate = useNavigate();
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [editMode, setEditMode] = useState(false);
+  const [editingIndex, setEditingIndex] = useState(null);
 
-  const handleSave = () => {
-    form.validateFields()
-      .then((values) => {
-        if (mode === 'add') {
-          message.success('New user added successfully!');
-          console.log('Adding user:', values);
-        } else {
-          message.success('User details updated successfully!');
-          console.log('Updating user:', values);
-        }
-        navigate('/admin');
-      })
-      .catch((info) => {
-        console.log('Validation failed:', info);
-      });
+  const showAddModal = () => {
+    setEditMode(false);
+    form.resetFields();
+    setIsModalVisible(true);
   };
 
-  const handleDelete = () => {
-    message.warning(`User with ID ${user.id} deleted successfully!`);
-    console.log('Deleting user:', user.id);
-    navigate('/admin');
+  const showEditModal = (index) => {
+    setEditMode(true);
+    setEditingIndex(index);
+    form.setFieldsValue(employees[index]);
+    setIsModalVisible(true);
   };
 
-  const handleFormChange = (_, allValues) => {
-    setUser(allValues);
+  const handleDelete = (index) => {
+    const updated = [...employees];
+    const deleted = updated.splice(index, 1);
+    setEmployees(updated);
+    message.success(`Deleted employee: ${deleted[0].name}`);
   };
+
+  const handleModalOk = () => {
+    form.validateFields().then(values => {
+      if (editMode) {
+        const updated = [...employees];
+        updated[editingIndex] = values;
+        setEmployees(updated);
+        message.success('Employee details updated');
+      } else {
+        setEmployees([...employees, values]);
+        message.success('Employee added');
+      }
+      setIsModalVisible(false);
+    }).catch(err => {
+      console.log('Validation Failed:', err);
+    });
+  };
+
+  const columns = [
+    {
+      title: 'ID',
+      dataIndex: 'id',
+      key: 'id',
+    },
+    {
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name',
+    },
+    {
+      title: 'Email',
+      dataIndex: 'email',
+      key: 'email',
+    },
+    {
+      title: 'Phone',
+      dataIndex: 'phone',
+      key: 'phone',
+    },
+    {
+      title: 'Designation',
+      dataIndex: 'designation',
+      key: 'designation',
+    },
+    {
+      title: 'Actions',
+      key: 'actions',
+      render: (_, __, index) => (
+        <>
+          <Button type="link" icon={<EditOutlined />} onClick={() => showEditModal(index)}>
+            Edit
+          </Button>
+          <Button type="link" danger icon={<DeleteOutlined />} onClick={() => handleDelete(index)}>
+            Delete
+          </Button>
+        </>
+      ),
+    }
+  ];
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Sider width={220}>
         <SidebarAdmin />
       </Sider>
-      <Layout style={{ padding: '24px' }}>
-        <Content style={{ background: '#fff', padding: 24, borderRadius: 8 }}>
-          <Title level={3}>{mode === 'add' ? 'Add New User' : 'Edit User Details'}</Title>
 
-          <Card bordered style={{ maxWidth: 600 }}>
-            <Form
-              layout="vertical"
-              form={form}
-              initialValues={user}
-              onValuesChange={handleFormChange}
-            >
+      <Layout style={{ padding: 24 }}>
+        <Content style={{ background: '#fff', padding: 24, borderRadius: 8 }}>
+          <Title level={3}>Manage Employees</Title>
+
+          <Card
+            title="Employee Table"
+            extra={
+              <Button icon={<PlusOutlined />} type="primary" onClick={showAddModal}>
+                Add Employee
+              </Button>
+            }
+            style={{ maxWidth: '100%' }}
+          >
+            <Table
+              dataSource={employees}
+              columns={columns}
+              rowKey="id"
+              pagination={{ pageSize: 5 }}
+            />
+          </Card>
+
+          <Modal
+            title={editMode ? 'Edit Employee' : 'Add New Employee'}
+            open={isModalVisible}
+            onOk={handleModalOk}
+            onCancel={() => setIsModalVisible(false)}
+            okText={editMode ? 'Save Changes' : 'Add'}
+          >
+            <Form form={form} layout="vertical">
               <Form.Item
                 label="User ID"
                 name="id"
                 rules={[{ required: true, message: 'Please enter user ID' }]}
               >
-                <Input placeholder="Enter ID" disabled={mode === 'edit'} />
+                <Input disabled={editMode} placeholder="Enter ID" />
               </Form.Item>
 
               <Form.Item
@@ -101,26 +172,8 @@ const EditUser = () => {
               >
                 <Input placeholder="Enter designation" />
               </Form.Item>
-
-              <Space style={{ marginTop: 16 }}>
-                <Button type="primary" onClick={handleSave}>
-                  {mode === 'add' ? 'Add User' : 'Save Changes'}
-                </Button>
-                {mode === 'edit' && (
-                  <Button danger onClick={handleDelete}>
-                    Delete User
-                  </Button>
-                )}
-              </Space>
             </Form>
-          </Card>
-
-          <Card style={{ marginTop: 24, maxWidth: 600 }}>
-            <Radio.Group value={mode} onChange={(e) => setMode(e.target.value)}>
-              <Radio value="add">Add Mode</Radio>
-              <Radio value="edit">Edit Mode</Radio>
-            </Radio.Group>
-          </Card>
+          </Modal>
         </Content>
       </Layout>
     </Layout>
