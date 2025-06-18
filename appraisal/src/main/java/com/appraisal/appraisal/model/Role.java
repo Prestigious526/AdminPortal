@@ -1,26 +1,26 @@
 package com.appraisal.appraisal.model;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
+import lombok.*;
 
 @Entity
+@Table(name= "roles")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Role {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private RoleType role;
-    private LocalDateTime createdAt = LocalDateTime.now();
-    private LocalDateTime updatedAt = LocalDateTime.now();
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    private Integer id;
 
+    @Enumerated(EnumType.STRING) // This maps the enum to DB as string
+    @Column(nullable= false)
+    private RoleType role; 
 
-    public enum RoleType{
-        hr, manager, employee
-    }
-    public Long getId() { return id; }
-    public RoleType getRole() { return role; }
-    public void setRole(RoleType role) { this.role = role; }
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public LocalDateTime getUpdatedAt() { return updatedAt; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
-    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
+    @Column(name= "created_at", columnDefinition= "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private java.sql.Timestamp createdAt;
+
+    @Column(name= "updated_at", columnDefinition= "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private java.sql.Timestamp updatedAt;
 }
