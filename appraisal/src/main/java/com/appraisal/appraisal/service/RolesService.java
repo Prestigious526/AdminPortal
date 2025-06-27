@@ -7,11 +7,11 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class RoleService {
+public class RolesService {
 
-    private final RoleRepository repository;
+    private final RolesRepository repository;
 
-    public RoleService(RoleRepository repository) {
+    public RolesService(RolesRepository repository) {
         this.repository = repository;
     }
 

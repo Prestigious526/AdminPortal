@@ -26,6 +26,15 @@ public class EmployeeController{
         return service.getEmployeeById(id);
     }
 
+    @GetMapping("/secure")
+    public String secretEndpoint() {
+        return "Only logged in users can see this";
+    }
+
+    public employee findByEmail(@RequestParam String email) {
+        return service.findByEmail(email);
+    }
+
     @PostMapping
     public employee createEmployee(@RequestBody employee employee){
         return service.saveEmployee(employee);
