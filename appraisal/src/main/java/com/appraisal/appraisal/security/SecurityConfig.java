@@ -1,4 +1,3 @@
-// SecurityConfig.java
 package com.appraisal.appraisal.security;
 
 import org.springframework.context.annotation.Bean;

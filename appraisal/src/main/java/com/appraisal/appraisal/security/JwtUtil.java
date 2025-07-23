@@ -1,4 +1,3 @@
-// JwtUtil.java
 package com.appraisal.appraisal.security;
 
 import io.jsonwebtoken.*;

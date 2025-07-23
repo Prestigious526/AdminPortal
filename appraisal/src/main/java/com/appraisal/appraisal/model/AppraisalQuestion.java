@@ -22,10 +22,8 @@ public class AppraisalQuestion {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt = LocalDateTime.now();
 
-    // No-args constructor
     public AppraisalQuestion() {}
 
-    // All-args constructor
     public AppraisalQuestion(Long id, String question, Integer year, Integer quarter, Boolean isActive,
                              LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
@@ -36,8 +34,6 @@ public class AppraisalQuestion {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
-
-    // Getters and setters
 
     public Long getId() {
         return id;

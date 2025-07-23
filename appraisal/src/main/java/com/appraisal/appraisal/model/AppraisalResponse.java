@@ -25,10 +25,8 @@ public class AppraisalResponse {
     private LocalDateTime createdAt = LocalDateTime.now();
     private LocalDateTime updatedAt = LocalDateTime.now();
 
-    // No-args constructor
     public AppraisalResponse() {}
 
-    // All-args constructor
     public AppraisalResponse(Long id, Integer employeeId, Integer questionId, String answer,
                              Integer managerId, String managerComment,
                              LocalDateTime createdAt, LocalDateTime updatedAt) {
@@ -41,8 +39,6 @@ public class AppraisalResponse {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
-
-    // Getters and setters
 
     public Long getId() {
         return id;

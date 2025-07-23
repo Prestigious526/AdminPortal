@@ -20,18 +20,14 @@ public class Role {
     @Column(name = "updated_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private java.sql.Timestamp updatedAt;
 
-    // No-args constructor
     public Role() {}
 
-    // All-args constructor
     public Role(Integer id, RoleType role, java.sql.Timestamp createdAt, java.sql.Timestamp updatedAt) {
         this.id = id;
         this.role = role;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
-
-    // Getters and Setters
 
     public Integer getId() {
         return id;
